@@ -70,7 +70,7 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git extract brew)
+plugins=(git extract brew xcode ssh golang)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -103,8 +103,8 @@ source $ZSH/oh-my-zsh.sh
 # pnpm
 export PNPM_HOME="/Users/lgiki/Library/pnpm"
 case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
+*":$PNPM_HOME:"*) ;;
+*) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
 export GPG_TTY=$(tty)
@@ -117,3 +117,29 @@ source "$HOME/.cargo/env"
 
 # Open Typora from terminal
 alias typora="open -a typora"
+
+# Flutter
+export PATH=$HOME/Developer/flutter/bin:$PATH
+
+# Set brew mirror
+brew-mirror() {
+  export HOMEBREW_API_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/api"
+  export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"
+  export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
+  export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"
+  export HOMEBREW_PIP_INDEX_URL="https://pypi.tuna.tsinghua.edu.cn/simple"
+}
+
+csv2json() {
+  local csvfile="$1"
+  cat "$csvfile" | python3 -c "import csv, json, sys; print(json.dumps([dict(r) for r in csv.DictReader(sys.stdin)], ensure_ascii=False))"
+}
+
+# Function to retrieve WiFi password for a given SSID
+# Example usage: wifi_pwd "Your_SSID"
+wifi_pwd() {
+  local SSID=$1
+  security find-generic-password -D "AirPort network password" -a "$SSID" -g | grep "password:"
+}
+
+export LANG=en_US.UTF-8
